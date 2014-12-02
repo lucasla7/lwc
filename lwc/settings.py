@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'joins',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -46,6 +47,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'lwc.middleware.ReferMiddleware'
 )
 
 ROOT_URLCONF = 'lwc.urls'
@@ -76,6 +78,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+SHARE_URL = "http://localhost:8000/?ref="
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates/'),
+    #BASE_DIR + "/templates/",
+    #'/home/luis/lwc/lwc/templates/',
+    )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
