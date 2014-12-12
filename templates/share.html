@@ -1,11 +1,222 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
-	{% block content %}
+{% block jquery %}
+	
+	$signUpCount = 20;
 
-	{{ ref_id }} <br/>
+	function completedTask(progressBarId)
+	{
+		$(progressBarId).css("width", "100%").attr("aria-valuenow", "100").text("Completed ;)");
+	};
 
-	{{ count }} <br/>
+	function emptyTask(progressBarId)
+	{
+		//$(progressBarId).css("width", "0%").attr("aria-valuenow", "0").text("Come on, you can!").css("text-shadow", "0px 0px 5px rgba(170, 0, 0, 0.9)");
+		$(progressBarId).css("width", "0%").attr("aria-valuenow", "0");
+		$(progressBarId).parent().append("<div style='text-shadow: 0px 0px 5px rgba(170, 0, 0, 0.9);color: white; font-size: 12px;margin-top: 2px;'>Come on, you can :)</div>");
+		//$(progressBarId).css("width", "0%").attr("aria-valuenow", "0").css("text-shadow", "0px 0px 5px rgba(100, 0, 0, 0.9)").text("Come on, you can!");
+	};
 
-	{{ref_url}} <br/>
+	function setNewPercent(progressBarId, percentNum, signUpCount){
+		$(progressBarId).css("width", percentNum + "%").attr("aria-valuenow", percentNum);
+		$(progressBarId).append("<div id='now' style='width: "+$(progressBarId).parent().width()+"px; float: left; text-shadow: 0px 0px 5px rgba(13, 11, 50, 0.9);color: white; font-size: 12px;'>Friends joined: " + signUpCount +"</div>" );
+	};
 
-	{% endblock %}
+	$( window ).bind("resize", function(){
+		// Change the width of the div
+		$w = $("#now").parent().parent().width();
+		$("#now").width( $w );
+	});
+
+	if ($signUpCount >= 0 && $signUpCount < 5) {
+		$newPercent = $signUpCount/5 * 100;
+		$newPercent = $newPercent.toFixed(2);
+		setNewPercent("#count5", $newPercent, $signUpCount);
+		emptyTask("#count10");
+		emptyTask("#count25");
+		emptyTask("#count50");
+		//$("#count5").css("width", $newPercent + "%").attr("aria-valuenow", $newPercent).text($newPercent + "%").css("text-shadow", "0px 0px 5px rgba(100, 171, 14, 0.9)");
+	}
+	else if ($signUpCount >= 5 && $signUpCount < 10) {
+		completedTask("#count5");
+		$newPercent = ($signUpCount-5)/5 *100;
+		$newPercent = $newPercent.toFixed(2);
+		setNewPercent("#count10", $newPercent, $signUpCount);
+		emptyTask("#count25");
+		emptyTask("#count50");
+		//$("#count10").css("width", $newPercent + "%").attr("aria-valuenow", $newPercent).text($newPercent + "%").css("text-shadow", "0px 0px 5px rgba(100, 171, 14, 0.9)");
+	}
+	else if ($signUpCount >= 10 && $signUpCount < 25) {
+		completedTask("#count5");
+		completedTask("#count10");
+		$newPercent = ($signUpCount-10)/15 *100;
+		$newPercent = $newPercent.toFixed(2);
+		setNewPercent("#count25", $newPercent, $signUpCount);
+		emptyTask("#count50");
+		//$("#count25").css("width", $newPercent + "%").attr("aria-valuenow", $newPercent).text($newPercent + "%").css("text-shadow", "0px 0px 5px rgba(100, 171, 14, 0.9)");
+	}
+	else if ($signUpCount >= 25 && $signUpCount < 50) {
+		completedTask("#count5");
+		completedTask("#count10");
+		completedTask("#count25");
+		$newPercent = ($signUpCount-25)/25 *100;
+		$newPercent = $newPercent.toFixed(2);
+		setNewPercent("#count50", $newPercent, $signUpCount);
+		//$("#count50").css("width", $newPercent + "%").attr("aria-valuenow", $newPercent).text($newPercent + "%").css("text-shadow", "0px 0px 5px rgba(100, 171, 14, 0.9)");
+	}
+	else {
+		completedTask("#count5");
+		completedTask("#count10");
+		completedTask("#count25");
+		completedTask("#count50");
+	}
+
+
+{% endblock %}
+
+{% block content %}
+
+{% include "navbar.html" %}
+	<div class="jumbotron">
+    	<div class="container">
+    	<div class="row">
+        	<div class="col-md-6 pull-right" style='text-align:center;'>
+        		<i class="fa fa-share-alt fa-5x"></i>
+            	<h1>Invite Friends &amp; Earn Rewards</h1>
+            	<p>Share your unique link below via Facebook, Twitter, LinkedIn, Reddit or Email to earn rewards from LWC.com</p>
+            	<div class="well">{{ ref_url }}</div>
+            	<br/>
+            	Share
+            	<br/>
+            	<a href="https://facebook.com/sharer/sharer.php?u={{ ref_url }}" target="_blank"><i class="fa fa-facebook-square fa-4x" style="color:#3b5998"></i></a>
+            	<a href="https://twitter.com/home?status=Hello%2C%20this%20is%20a%20%23tag%20that%20I%20want%20to%20share%20at%20some%20point.%20Tweet%20%40erporejillo.%20{{ ref_url }}" target="_blank"><i class="fa fa-twitter-square fa-4x" style="color:#55acee"></i></a>
+            	<a href="https://linkedin.com/shareArticle?mini=true&url={{ ref_url }}&title=Hello%20this%20is%20a%20title&summary=Hello%20this%20is%20the%20summary&source={{ ref_url }}" target="_blank"><i class="fa fa-linkedin-square fa-4x" style="color:#0077b5"></i></a>
+            	<a href="http://www.reddit.com/submit?url={{ ref_url }}&title=Hello%20this%20is%20a%20title" target="_blank"><i class="fa fa-reddit-square fa-4x" style="color:#ff4500"></i></a>
+            	<a href="https://plus.google.com/share=?url={{ ref_url }}" target="_blank"><i class="fa fa-google-plus-square fa-4x" style="color:#d82a21"></i></a>
+        	</div>
+        	<div class="col-md-6 pull-left">
+            	<p>
+                	<img src="{% static 'img/launch.jpg' %}"  class='img-responsive img-rounded' alt="" />
+            	</p>
+        	</div>
+        </div>
+      	</div>
+    </div>
+	<div class="container" style='text-align:center;'>
+
+	Joined number is: {{ count }} <br/>
+	<br/>
+	<div class="well">{{ ref_url }}</div>
+	<div class="row">
+		<div class="col-sm-3">
+			<h3>5 Joined</h3>
+			<div class="progress" id="progress5">
+				<div id="count5" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+				</div>
+			</div>
+			<h4>
+				Reward Name
+			</h4>
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<hr/>
+			<span style='text-align:left !important'>
+			<h5>
+				Rewards Include:
+			</h5>
+			<ul>
+				<li>
+					Reward 1
+				</li>
+				<li>
+					Reward 2
+				</li>
+			</ul>
+			</span>
+			<hr/>
+		</div>
+		<div class="col-sm-3">
+			<h3>10 Joined</h3>
+			<div class="progress">
+				<div id="count10" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+				</div>
+			</div>
+			<h4>
+				Reward Name
+			</h4>
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<hr/>
+			<span style='text-align:left !important'>
+			<h5>
+				Rewards Include:
+			</h5>
+			<ul>
+				<li>
+					Reward 1
+				</li>
+				<li>
+					Reward 2
+				</li>
+			</ul>
+			</span>
+			<hr/>
+		</div>
+		<div class="col-sm-3">
+			<h3>25 Joined</h3>
+			<div class="progress">
+				<div id="count25" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+				</div>
+			</div>
+			<h4>
+				Reward Name
+			</h4>
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<hr/>
+			<span style='text-align:left !important'>
+			<h5>
+				Rewards Include:
+			</h5>
+			<ul>
+				<li>
+					Reward 1
+				</li>
+				<li>
+					Reward 2
+				</li>
+			</ul>
+			</span>
+			<hr/>
+		</div>
+		<div class="col-sm-3">
+			<h3>50 Joined</h3>
+			<div class="progress">
+				<div id="count50" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+				</div>
+			</div>
+			<h4>
+				Reward Name
+			</h4>
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<img src="https://cfe-static.s3.amazonaws.com/static/img/ico/apple-touch-icon-72-precomposed.png" alt="">
+			<hr/>
+			<span style='text-align:left !important'>
+			<h5>
+				Rewards Include:
+			</h5>
+			<ul>
+				<li>
+					Reward 1
+				</li>
+				<li>
+					Reward 2
+				</li>
+			</ul>
+			</span>
+			<hr/>
+		</div>
+	</div>
+</div>
+{% endblock %}

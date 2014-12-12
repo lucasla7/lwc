@@ -90,3 +90,16 @@ TEMPLATE_DIRS = (
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#STATIC_ROOT = '/home/luis/lwc/lwc/static/static_root'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static', 'static_dirs'),
+    # '/home/luis/lwc/lwc/static/static_dirs',
+)
+
+#MEDIA_ROOT = '/home/luis/lwc/lwc/static/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+
+MEDIA_URL = '/media/'
